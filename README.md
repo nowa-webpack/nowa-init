@@ -20,5 +20,5 @@ $ npm i nowa-init -g
 ## Usage
 
 ```bash
-$ nowa help init
+$ nowa init --help
 ```

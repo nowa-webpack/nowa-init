@@ -2,26 +2,40 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:17:55
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-05-12 20:15:22
+* @Last Modified time: 2016-05-17 23:14:08
 */
 
 'use strict';
 
 var path = require('path');
+var spawn = require('child_process').spawn;
 
 var inquirer = require('inquirer');
+var chalk = require('chalk');
 var gitConfig = require('git-config');
 
-module.exports = function(type) {
+var util = require('./util');
 
-  console.log('\nWelcome to nowa project generator!\n');
+module.exports = function(url) {
+
+  console.log('');
+  console.log('Welcome to nowa project generator!');
+  console.log('I will use this template to generate your project:');
+  console.log(chalk.green(url));
+  console.log('May I ask you some questions?');
+  console.log('');
+
+  var abc = util.loadAbc();
 
   // interaction
-  var config = gitConfig.sync('.git/config') || {};
-  inquirer.prompt([{
+  var config = gitConfig.sync(path.join(abc.root, '.git', 'config')) || {};
+  var promptTask = inquirer.prompt([{
     name: 'name',
     message: 'Project name',
-    default: path.basename(process.cwd())
+    default: path.basename(process.cwd()),
+    validate: function(name) {
+      return /^\w[\w\-]*\w$/.test(name) ? true : 'name is not valid';
+    }
   }, {
     name: 'description',
     message: 'Project description',
@@ -33,7 +47,10 @@ module.exports = function(type) {
   }, {
     name: 'version',
     message: 'Project version',
-    default: '1.0.0'
+    default: '1.0.0',
+    validate: function(version) {
+      return /^\d+\.\d+\.\d+([\.\-\w])*$/.test(version) ? true : 'version is not valid';
+    }
   }, {
     name: 'homepage',
     message: 'Project homepage'
@@ -45,7 +62,44 @@ module.exports = function(type) {
     name: 'library',
     type: 'confirm',
     message: 'Generate a customized UI library?'
-  }]).then(function(answer) {
+  }]);
 
+  // start to generate files when templates and answers are ready
+  Promise.all([
+    new Promise(function(resolve) {
+      util.fetchTpl(url, resolve);
+    }),
+    promptTask
+  ]).then(function(results) {
+    var answers = results[1];
+    answers.template = url;
+    util.makeFiles(path.join(results[0], 'proj'), abc.root, answers, function() {
+      npmInstall(abc.root);
+    });
   });
 };
+
+// call npm install
+function npmInstall(root) {
+  spawn('npm', [
+    'install',
+    '-d'
+  ], {
+    cwd: root,
+    stdio: 'inherit'
+  }).on('exit', function(code) {
+    if (code === 0) {
+      buildLibraries(root);
+    }
+  });
+}
+
+// build libraries
+function buildLibraries(cwd) {
+  spawn('nowa', [
+    'lib'
+  ], {
+    cwd: root,
+    stdio: 'inherit'
+  });
+}
