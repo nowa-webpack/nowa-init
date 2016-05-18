@@ -1,8 +1,8 @@
 /*
 * @Author: gbk
 * @Date:   2016-05-12 19:17:55
-* @Last Modified by:   gbk
-* @Last Modified time: 2016-05-17 23:14:08
+* @Last Modified by:   caoke
+* @Last Modified time: 2016-05-18 13:39:07
 */
 
 'use strict';
@@ -62,6 +62,11 @@ module.exports = function(url) {
     name: 'library',
     type: 'confirm',
     message: 'Generate a customized UI library?'
+  }, {
+    name: 'npm',
+    type: 'list',
+    choices: [ 'npm', 'cnpm', 'tnpm' ],
+    default: 'npm'
   }]);
 
   // start to generate files when templates and answers are ready
@@ -74,19 +79,20 @@ module.exports = function(url) {
     var answers = results[1];
     answers.template = url;
     util.makeFiles(path.join(results[0], 'proj'), abc.root, answers, function() {
-      npmInstall(abc.root);
+      npmInstall(answers.npm, abc.root);
     });
   });
 };
 
 // call npm install
-function npmInstall(root) {
-  spawn('npm', [
+function npmInstall(npm, root) {
+  spawn(npm, [
     'install',
     '-d'
   ], {
     cwd: root,
-    stdio: 'inherit'
+    stdio: 'inherit',
+    stderr: 'inherit'
   }).on('exit', function(code) {
     if (code === 0) {
       buildLibraries(root);
@@ -100,6 +106,7 @@ function buildLibraries(cwd) {
     'lib'
   ], {
     cwd: root,
-    stdio: 'inherit'
+    stdio: 'inherit',
+    stderr: 'inherit'
   });
 }

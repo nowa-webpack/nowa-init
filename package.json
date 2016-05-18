@@ -1,6 +1,6 @@
 {
   "name": "nowa-init",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "nowa project generator",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
   "license": "MIT",
   "homepage": "https://github.com/nowa-webpack/nowa-init#readme",
   "peerDependencies": {
-    "nowa": "~1.0.0"
+    "nowa": "~0.1.0"
   },
   "dependencies": {
     "chalk": "~1.1.3",
