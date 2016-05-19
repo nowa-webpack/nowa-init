@@ -13,8 +13,8 @@ nowa project generator
 ## Install
 
 ```bash
-$ npm i nowa
-$ npm i nowa-init -g
+$ npm i nowa -g
+$ nowa install init
 ```
 
 ## Usage

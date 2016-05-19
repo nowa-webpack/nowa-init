@@ -1,8 +1,8 @@
 /*
 * @Author: gbk
 * @Date:   2016-05-12 19:17:55
-* @Last Modified by:   caoke
-* @Last Modified time: 2016-05-18 13:39:07
+* @Last Modified by:   gbk
+* @Last Modified time: 2016-05-18 16:15:16
 */
 
 'use strict';
@@ -65,6 +65,7 @@ module.exports = function(url) {
   }, {
     name: 'npm',
     type: 'list',
+    message: 'Which npm do you perfer?',
     choices: [ 'npm', 'cnpm', 'tnpm' ],
     default: 'npm'
   }]);
