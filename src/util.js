@@ -142,7 +142,8 @@ var util = {
     // traverse all template files
     glob.sync('**', {
       cwd: sourceDir,
-      nodir: true
+      nodir: true,
+      dot: true
     }).forEach(function(source) {
 
       // real target file
