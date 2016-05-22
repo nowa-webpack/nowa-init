@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-05-18 16:09:40
+* @Last Modified time: 2016-05-20 23:13:26
 */
 
 'use strict';
@@ -56,7 +56,7 @@ var util = {
   },
 
   // fetch remote template
-  fetchTpl: function(url, callback) {
+  fetchTpl: function(url, callback, force) {
     callback = onetime(callback);
     var now = Date.now();
     var basedir = path.join(os.homedir(), '.nowa', 'init', 'templates');
@@ -70,22 +70,22 @@ var util = {
       manifest = {};
     }
 
-    // template dir exists and was created within 24 hours
-    if (manifest[url] && now - manifest[url].create < 3600000 * 24) {
+    // use cached template
+    if (!force) {
 
-      // use the old template and break
-      return callback(manifest[url].dir);
+      // template dir exists and was created within 24 hours
+      if (manifest[url] && now - manifest[url].create < 3600000 * 24) {
 
-    // template dir exists but expired
-    } else if (manifest[url]) {
+        // use the old template and break
+        return callback(manifest[url].dir);
 
-      // use the old templates and fetch the new ones
-      callback(manifest[url].dir);
+      // template dir exists but expired
+      } else if (manifest[url]) {
+
+        // use the old templates and fetch the new ones
+        callback(manifest[url].dir);
+      }
     }
-
-    // start to fetch templates
-    var uniqueDir = util.uniqueDirname(basedir);
-    var tpldir = path.join(basedir, uniqueDir);
 
     // download template zipfile
     new Download({
@@ -97,22 +97,28 @@ var util = {
         return;
       }
 
-      // replace the old dir
-      rimraf(tpldir, {
-        disableGlob: true
-      }, function() {
-        fs.renameSync(files[0].path, tpldir);
+      // delete the old dir if exists
+      if (manifest[url]) {
+        rimraf(manifest[url].dir, {
+          disableGlob: true
+        }, function() {
+        });
+      }
 
-        // update manifest file
-        manifest[url] = {
-          create: now,
-          dir: tpldir
-        };
-        fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, '  '));
+      // create unique dirname
+      var uniqueDir = util.uniqueDirname(basedir);
+      var tpldir = path.join(basedir, uniqueDir);
+      fs.renameSync(files[0].path, tpldir);
 
-        // callback
-        callback(tpldir);
-      });
+      // update manifest file
+      manifest[url] = {
+        create: now,
+        dir: tpldir
+      };
+      fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, '  '));
+
+      // callback
+      callback(tpldir);
     });
   },
 

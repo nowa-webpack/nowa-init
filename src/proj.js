@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:17:55
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-05-18 16:15:16
+* @Last Modified time: 2016-05-22 18:05:23
 */
 
 'use strict';
@@ -16,7 +16,7 @@ var gitConfig = require('git-config');
 
 var util = require('./util');
 
-module.exports = function(url) {
+module.exports = function(url, force) {
 
   console.log('');
   console.log('Welcome to nowa project generator!');
@@ -73,7 +73,7 @@ module.exports = function(url) {
   // start to generate files when templates and answers are ready
   Promise.all([
     new Promise(function(resolve) {
-      util.fetchTpl(url, resolve);
+      util.fetchTpl(url, resolve, force);
     }),
     promptTask
   ]).then(function(results) {
@@ -95,7 +95,7 @@ function npmInstall(npm, root) {
     stdio: 'inherit',
     stderr: 'inherit'
   }).on('exit', function(code) {
-    if (code === 0) {
+    if (code === 0 && util.loadAbc().options.libraries) {
       buildLibraries(root);
     }
   });
