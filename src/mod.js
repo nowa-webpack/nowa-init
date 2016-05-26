@@ -1,8 +1,8 @@
 /*
 * @Author: gbk
 * @Date:   2016-05-12 19:18:00
-* @Last Modified by:   gbk
-* @Last Modified time: 2016-05-20 18:26:08
+* @Last Modified by:   caoke
+* @Last Modified time: 2016-05-26 16:54:24
 */
 
 'use strict';
@@ -35,15 +35,13 @@ module.exports = function(type, force) {
     }),
     promptTask
   ]).then(function(results) {
-    var answers = results[1];
-    answers.libraries = !!abc.options.libraries;
-    answers.name = answers.name.toLowerCase();
-    answers.Name = answers.name.replace(/[\W_]+(.)/g, function(p, p1) {
-      return p1.toUpperCase();
-    }).replace(/^./, function(p) {
-      return p.toUpperCase();
+
+    // deal with custom prompt config
+    var promptConfigPath = path.join(results[0], type + '.js');
+    util.customPrompts(promptConfigPath, results[1], abc).then(function(answers) {
+
+      // make files
+      util.makeFiles(path.join(results[0], type), abc.root, answers);
     });
-    answers.suffix = util.suffixByVars(abc.options.vars, abc.options.buildvars);
-    util.makeFiles(path.join(results[0], type), abc.root, answers);
   });
 };

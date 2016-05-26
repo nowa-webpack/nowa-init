@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-05-20 23:13:26
+* @Last Modified time: 2016-05-26 19:10:49
 */
 
 'use strict';
@@ -122,24 +122,6 @@ var util = {
     });
   },
 
-  // make filename suffix by vars
-  suffixByVars: function (vars, buildvars) {
-    if (vars) {
-      var suffix = '';
-      for (var key in vars) {
-        var value = vars[key];
-
-        // filename suffix will not contain `/`
-        if (value !== undefined && buildvars[key] && buildvars[key].length > 1) {
-          suffix += '-' + value.toString().replace(/\//, '');
-        }
-      }
-      return suffix;
-    } else {
-      return '';
-    }
-  },
-
   // generate files
   makeFiles: function(sourceDir, targetDir, data, callback) {
     console.log('\nStart to copy files ...\n');
@@ -203,6 +185,34 @@ var util = {
     } else {
       callback && callback();
     }
+  },
+
+  // deal with custom prompts
+  customPrompts: function(configPath, prevAnswers, abc) {
+    return new Promise(function(resolve) {
+      try {
+        var config = require(configPath);
+        if (config.prompts && config.prompts.length) {
+          inquirer.prompt(config.prompts).then(function(answers) {
+            answers = Object.assign({}, answers, prevAnswers);
+            if (config.answers) {
+              resolve(config.answers(answers, abc));
+            } else {
+              resolve(answers);
+            }
+          });
+        } else {
+          if (config.answers) {
+            resolve(config.answers(prevAnswers, abc));
+          } else {
+            resolve(prevAnswers);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+        resolve(prevAnswers);
+      }
+    });
   }
 };
 

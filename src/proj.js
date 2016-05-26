@@ -1,8 +1,8 @@
 /*
 * @Author: gbk
 * @Date:   2016-05-12 19:17:55
-* @Last Modified by:   gbk
-* @Last Modified time: 2016-05-22 18:05:23
+* @Last Modified by:   caoke
+* @Last Modified time: 2016-05-26 17:01:10
 */
 
 'use strict';
@@ -59,10 +59,6 @@ module.exports = function(url, force) {
     message: 'Project repository',
     default: (config['remote "origin"'] || {}).url || ''
   }, {
-    name: 'library',
-    type: 'confirm',
-    message: 'Generate a customized UI library?'
-  }, {
     name: 'npm',
     type: 'list',
     message: 'Which npm do you perfer?',
@@ -79,8 +75,15 @@ module.exports = function(url, force) {
   ]).then(function(results) {
     var answers = results[1];
     answers.template = url;
-    util.makeFiles(path.join(results[0], 'proj'), abc.root, answers, function() {
-      npmInstall(answers.npm, abc.root);
+
+    // deal with custom prompt config
+    var promptConfigPath = path.join(results[0], 'proj.js');
+    util.customPrompts(promptConfigPath, answers, abc.options).then(function(answers) {
+
+      // make files
+      util.makeFiles(path.join(results[0], 'proj'), abc.root, answers, function() {
+        npmInstall(answers.npm, abc.root);
+      });
     });
   });
 };

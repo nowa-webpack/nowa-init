@@ -2,7 +2,7 @@
 * @Author: gbk <ck0123456@gmail.com>
 * @Date:   2016-04-21 17:34:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-05-20 18:30:41
+* @Last Modified time: 2016-05-23 19:37:37
 */
 
 'use strict';
@@ -19,7 +19,7 @@ module.exports = {
   description: pkg.description,
 
   options: [
-    [ '-t, --template [uri]', 'template zip url' ],
+    [ '-t, --template <uri>', 'template zip url' ],
     [ '-f, --force', 'force to fetch new template' ]
   ],
 
@@ -41,7 +41,6 @@ module.exports = {
     // generate project
     switch (template) {
       case 'h5':
-      case 'tingle':
       case 'salt':
         return proj('https://github.com/nowa-webpack/template-salt/archive/master.zip', force);
       case 'web':
