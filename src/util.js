@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-05-26 19:10:49
+* @Last Modified time: 2016-05-29 22:05:35
 */
 
 'use strict';
@@ -209,7 +209,6 @@ var util = {
           }
         }
       } catch (e) {
-        console.error(e);
         resolve(prevAnswers);
       }
     });
