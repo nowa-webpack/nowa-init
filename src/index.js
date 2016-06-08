@@ -2,7 +2,7 @@
 * @Author: gbk <ck0123456@gmail.com>
 * @Date:   2016-04-21 17:34:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-05-23 19:37:37
+* @Last Modified time: 2016-06-08 16:23:49
 */
 
 'use strict';
@@ -25,11 +25,6 @@ module.exports = {
 
   action: function(a0, a1) {
 
-    // generate mod
-    if (a0 === 'page' || a0 === 'mod') {
-      return mod(a0);
-    }
-
     // parse argvs
     a1 = a1 || {};
     var template = a1.template || a1.type || a0.template || a0.type || a0;
@@ -47,7 +42,11 @@ module.exports = {
       case 'uxcore':
         return proj('https://github.com/nowa-webpack/template-uxcore/archive/master.zip', force);
       default:
-        return proj(template);
+        if (/^https?:\/\//.test(template)) {
+          return proj(template);
+        } else {
+          return mod(template);
+        }
     }
   }
 };
