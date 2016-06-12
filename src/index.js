@@ -2,7 +2,7 @@
 * @Author: gbk <ck0123456@gmail.com>
 * @Date:   2016-04-21 17:34:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-08 16:23:49
+* @Last Modified time: 2016-06-12 13:05:27
 */
 
 'use strict';
@@ -33,6 +33,11 @@ module.exports = {
       template = 'uxcore';
     }
 
+    // generate module
+    if (typeof a0 === 'string' && !/^https?:\/\//.test(a0)) {
+      return mod(template);
+    }
+
     // generate project
     switch (template) {
       case 'h5':
@@ -42,11 +47,7 @@ module.exports = {
       case 'uxcore':
         return proj('https://github.com/nowa-webpack/template-uxcore/archive/master.zip', force);
       default:
-        if (/^https?:\/\//.test(template)) {
-          return proj(template);
-        } else {
-          return mod(template);
-        }
+        return proj(template);
     }
   }
 };
