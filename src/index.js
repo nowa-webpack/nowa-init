@@ -2,7 +2,7 @@
 * @Author: gbk <ck0123456@gmail.com>
 * @Date:   2016-04-21 17:34:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-12 13:05:27
+* @Last Modified time: 2016-06-12 13:08:40
 */
 
 'use strict';
@@ -35,7 +35,7 @@ module.exports = {
 
     // generate module
     if (typeof a0 === 'string' && !/^https?:\/\//.test(a0)) {
-      return mod(template);
+      return mod(a0, force);
     }
 
     // generate project
@@ -47,7 +47,7 @@ module.exports = {
       case 'uxcore':
         return proj('https://github.com/nowa-webpack/template-uxcore/archive/master.zip', force);
       default:
-        return proj(template);
+        return proj(template, force);
     }
   }
 };
