@@ -1,8 +1,8 @@
 /*
 * @Author: gbk
 * @Date:   2016-05-12 19:17:55
-* @Last Modified by:   caoke
-* @Last Modified time: 2016-05-26 17:01:10
+* @Last Modified by:   gbk
+* @Last Modified time: 2016-06-14 15:41:41
 */
 
 'use strict';
@@ -90,7 +90,7 @@ module.exports = function(url, force) {
 
 // call npm install
 function npmInstall(npm, root) {
-  spawn(npm, [
+  spawn(process.platform === 'win32' ? npm + '.cmd' : npm, [
     'install',
     '-d'
   ], {
@@ -106,7 +106,7 @@ function npmInstall(npm, root) {
 
 // build libraries
 function buildLibraries(cwd) {
-  spawn('nowa', [
+  spawn(process.platform === 'win32' ? 'nowa.cmd' : 'nowa', [
     'lib'
   ], {
     cwd: root,
