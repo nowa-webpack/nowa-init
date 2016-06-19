@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:17:55
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-14 15:41:41
+* @Last Modified time: 2016-06-19 21:18:45
 */
 
 'use strict';
@@ -78,10 +78,11 @@ module.exports = function(url, force) {
 
     // deal with custom prompt config
     var promptConfigPath = path.join(results[0], 'proj.js');
+    var filter = loadConfig(promptConfigPath).filter;
     util.customPrompts(promptConfigPath, answers, abc.options).then(function(answers) {
 
       // make files
-      util.makeFiles(path.join(results[0], 'proj'), abc.root, answers, function() {
+      util.makeFiles(path.join(results[0], 'proj'), abc.root, answers, filter, function() {
         npmInstall(answers.npm, abc.root);
       });
     });
@@ -113,4 +114,13 @@ function buildLibraries(cwd) {
     stdio: 'inherit',
     stderr: 'inherit'
   });
+}
+
+// load prompt config file
+function loadConfig(promptConfigPath) {
+  try {
+    return require(promptConfigPath);
+  } catch(e) {
+    return {};
+  }
 }

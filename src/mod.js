@@ -1,8 +1,8 @@
 /*
 * @Author: gbk
 * @Date:   2016-05-12 19:18:00
-* @Last Modified by:   caoke
-* @Last Modified time: 2016-05-26 16:54:24
+* @Last Modified by:   gbk
+* @Last Modified time: 2016-06-19 21:18:32
 */
 
 'use strict';
@@ -38,10 +38,20 @@ module.exports = function(type, force) {
 
     // deal with custom prompt config
     var promptConfigPath = path.join(results[0], type + '.js');
+    var filter = loadConfig(promptConfigPath).filter;
     util.customPrompts(promptConfigPath, results[1], abc).then(function(answers) {
 
       // make files
-      util.makeFiles(path.join(results[0], type), abc.root, answers);
+      util.makeFiles(path.join(results[0], type), abc.root, answers, filter);
     });
   });
 };
+
+// load prompt config file
+function loadConfig(promptConfigPath) {
+  try {
+    return require(promptConfigPath);
+  } catch(e) {
+    return {};
+  }
+}
