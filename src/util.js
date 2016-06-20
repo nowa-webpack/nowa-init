@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-20 22:54:50
+* @Last Modified time: 2016-06-20 22:56:24
 */
 
 'use strict';
@@ -15,7 +15,6 @@ var ejs = require('ejs');
 var glob = require('glob');
 var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
-var onetime = require('onetime');
 var inquirer = require('inquirer');
 var Download = require('download');
 
@@ -57,7 +56,6 @@ var util = {
 
   // fetch remote template
   fetchTpl: function(url, callback, force) {
-    callback = onetime(callback);
     var now = Date.now();
     var basedir = path.join(os.homedir(), '.nowa', 'init', 'templates');
 
@@ -84,6 +82,7 @@ var util = {
     }).get(url).dest(basedir).run(function(err, files) {
       if (err) {
         console.error('\nCan not load url: ' + url);
+        process.exit(1);
         return;
       }
 
