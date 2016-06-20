@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-19 19:26:48
+* @Last Modified time: 2016-06-20 22:54:50
 */
 
 'use strict';
@@ -70,21 +70,11 @@ var util = {
       manifest = {};
     }
 
-    // use cached template
-    if (!force) {
+    // use cached template when template dir exists and was created within 24 hours
+    if (!force && manifest[url] && now - manifest[url].create < 3600000 * 24) {
 
-      // template dir exists and was created within 24 hours
-      if (manifest[url] && now - manifest[url].create < 3600000 * 24) {
-
-        // use the old template and break
-        return callback(manifest[url].dir);
-
-      // template dir exists but expired
-      } else if (manifest[url]) {
-
-        // use the old templates and fetch the new ones
-        callback(manifest[url].dir);
-      }
+      // use the old template and break
+      return callback(manifest[url].dir);
     }
 
     // download template zipfile
