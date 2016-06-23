@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-20 22:56:24
+* @Last Modified time: 2016-06-23 17:07:32
 */
 
 'use strict';
@@ -16,7 +16,7 @@ var glob = require('glob');
 var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 var inquirer = require('inquirer');
-var Download = require('download');
+var download = require('download');
 
 var util = {
 
@@ -76,15 +76,11 @@ var util = {
     }
 
     // download template zipfile
-    new Download({
-      mode: '644',
-      extract: true
-    }).get(url).dest(basedir).run(function(err, files) {
-      if (err) {
-        console.error('\nCan not load url: ' + url);
-        process.exit(1);
-        return;
-      }
+    download(url, basedir, {
+      extract: true,
+      retries: 0,
+      timeout: 10000
+    }).then(function(files) {
 
       // delete the old dir if exists
       if (manifest[url]) {
@@ -97,7 +93,7 @@ var util = {
       // create unique dirname
       var uniqueDir = util.uniqueDirname(basedir);
       var tpldir = path.join(basedir, uniqueDir);
-      fs.renameSync(files[0].path, tpldir);
+      fs.renameSync(path.join(basedir, files[0].path), tpldir);
 
       // update manifest file
       manifest[url] = {
@@ -108,6 +104,16 @@ var util = {
 
       // callback
       callback(tpldir);
+    }).catch(function(err) {
+
+      // use old template (if exists) when download fails
+      if (!force && manifest[url]) {
+        callback(manifest[url].dir);
+      } else {
+        console.error('\nCan not load url: ' + url + ': ' + err);
+        process.exit(1);
+        return;
+      }
     });
   },
 
