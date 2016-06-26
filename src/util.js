@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-23 17:07:32
+* @Last Modified time: 2016-06-26 17:41:09
 */
 
 'use strict';
@@ -17,6 +17,13 @@ var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 var inquirer = require('inquirer');
 var download = require('download');
+
+var ALIAS = {
+  h5: 'https://github.com/nowa-webpack/template-salt/archive/master.zip',
+  salt: 'https://github.com/nowa-webpack/template-salt/archive/master.zip',
+  web: 'https://github.com/nowa-webpack/template-uxcore/archive/master.zip',
+  uxcore: 'https://github.com/nowa-webpack/template-uxcore/archive/master.zip'
+};
 
 var util = {
 
@@ -39,6 +46,18 @@ var util = {
       root: abc ? dir : cwd, // use abc dir as project root
       options: abc && abc.options ? abc.options : {} // load abc options
     };
+  },
+
+  // alias getter
+  getAlias: function(key) {
+    return readAliasFile()[key] || key;
+  },
+
+  // alias setter
+  setAlias: function(key, value) {
+    var alias = readAliasFile();
+    alias[key] = value;
+    writeAliasFile(alias);
   },
 
   // create a unique dirname in dir
@@ -190,27 +209,26 @@ var util = {
   // deal with custom prompts
   customPrompts: function(configPath, prevAnswers, abc) {
     return new Promise(function(resolve) {
-      try {
-        var config = require(configPath);
-        if (config.prompts && config.prompts.length) {
-          inquirer.prompt(config.prompts).then(function(answers) {
-            answers = Object.assign({}, answers, prevAnswers);
-            if (config.answers) {
-              resolve(config.answers(answers, abc));
-            } else {
-              resolve(answers);
-            }
-          });
-        } else {
+      var config = require(configPath);
+      if (config.prompts && config.prompts.length) {
+        inquirer.prompt(config.prompts).then(function(answers) {
+          answers = Object.assign({}, answers, prevAnswers);
           if (config.answers) {
-            resolve(config.answers(prevAnswers, abc));
+            resolve(config.answers(answers, abc));
           } else {
-            resolve(prevAnswers);
+            resolve(answers);
           }
+        });
+      } else {
+        if (config.answers) {
+          resolve(config.answers(prevAnswers, abc));
+        } else {
+          resolve(prevAnswers);
         }
-      } catch (e) {
-        resolve(prevAnswers);
       }
+    }).catch(function(e) {
+      console.error(e);
+      resolve(prevAnswers);
     });
   }
 };
@@ -226,4 +244,25 @@ function writeFile(source, target, data) {
   } catch (e) {
     console.error(e);
   }
+}
+
+// read alias file
+function readAliasFile() {
+  var aliasFile = path.join(os.homedir(), '.nowa', 'init', 'alias.json');
+  try {
+    return JSON.parse(fs.readFileSync(aliasFile, 'utf-8'));
+  } catch(e) {
+    return writeAliasFile(ALIAS);
+  }
+}
+
+// write alias file
+function writeAliasFile(alias) {
+  var configDir = path.join(os.homedir(), '.nowa', 'init');
+  try {
+    mkdirp.sync(configDir);
+    fs.writeFileSync(path.join(configDir, 'alias.json'), JSON.stringify(alias));
+  } catch(e) {
+  }
+  return alias;
 }

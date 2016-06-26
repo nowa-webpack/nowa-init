@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:18:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-19 21:18:32
+* @Last Modified time: 2016-06-26 17:52:42
 */
 
 'use strict';
@@ -13,7 +13,7 @@ var inquirer = require('inquirer');
 
 var util = require('./util');
 
-module.exports = function(type, force) {
+module.exports = function(type, url, force) {
 
   console.log('\nWelcome to nowa component generator!\n');
 
@@ -31,7 +31,7 @@ module.exports = function(type, force) {
   // start to generate files when templates and answers are ready
   Promise.all([
     new Promise(function(resolve) {
-      util.fetchTpl(abc.options.template, resolve, force);
+      util.fetchTpl(url, resolve, force);
     }),
     promptTask
   ]).then(function(results) {
