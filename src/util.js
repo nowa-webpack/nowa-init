@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-26 17:41:09
+* @Last Modified time: 2016-06-27 19:31:49
 */
 
 'use strict';
@@ -209,26 +209,27 @@ var util = {
   // deal with custom prompts
   customPrompts: function(configPath, prevAnswers, abc) {
     return new Promise(function(resolve) {
-      var config = require(configPath);
-      if (config.prompts && config.prompts.length) {
-        inquirer.prompt(config.prompts).then(function(answers) {
-          answers = Object.assign({}, answers, prevAnswers);
-          if (config.answers) {
-            resolve(config.answers(answers, abc));
-          } else {
-            resolve(answers);
-          }
-        });
-      } else {
-        if (config.answers) {
-          resolve(config.answers(prevAnswers, abc));
+      try {
+        var config = require(configPath);
+        if (config.prompts && config.prompts.length) {
+          inquirer.prompt(config.prompts).then(function(answers) {
+            answers = Object.assign({}, answers, prevAnswers);
+            if (config.answers) {
+              resolve(config.answers(answers, abc));
+            } else {
+              resolve(answers);
+            }
+          });
         } else {
-          resolve(prevAnswers);
+          if (config.answers) {
+            resolve(config.answers(prevAnswers, abc));
+          } else {
+            resolve(prevAnswers);
+          }
         }
+      } catch(e) {
+        resolve(prevAnswers);
       }
-    }).catch(function(e) {
-      console.error(e);
-      resolve(prevAnswers);
     });
   }
 };
