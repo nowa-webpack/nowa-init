@@ -2,7 +2,7 @@
 * @Author: gbk <ck0123456@gmail.com>
 * @Date:   2016-04-21 17:34:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-26 18:25:51
+* @Last Modified time: 2016-07-05 17:13:07
 */
 
 'use strict';
@@ -28,6 +28,7 @@ module.exports = {
 
   options: [
     [ '-t, --template <uri>', 'template zip url' ],
+    [ '    --type <type>', 'shortcut of template option' ],
     [ '-f, --force', 'force to fetch new template' ],
     [ '-a, --as <alias>', 'alias to template url' ]
   ],
