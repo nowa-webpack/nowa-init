@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:18:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-26 17:52:42
+* @Last Modified time: 2016-09-01 21:19:14
 */
 
 'use strict';
@@ -15,14 +15,14 @@ var util = require('./util');
 
 module.exports = function(type, url, force) {
 
-  console.log('\nWelcome to nowa component generator!\n');
+  console.log('\nWelcome to nowa ' + type + ' generator!\n');
 
   var abc = util.loadAbc();
 
   // interaction
   var promptTask = inquirer.prompt([{
     name: 'name',
-    message: 'Component name',
+    message: type + ' name',
     validate: function(name) {
       return /^\w[\w\-]*\w$/.test(name) ? true : 'name is not valid';
     }
