@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-10-24 15:23:02
+* @Last Modified time: 2016-10-24 15:45:39
 */
 
 'use strict';
@@ -241,8 +241,14 @@ module.exports = util;
 function writeFile(source, target, data) {
   try {
     console.log('Generate file ' + path.relative(process.cwd(), target));
-    var tpl = fs.readFileSync(source, 'utf-8');
-    fs.writeFileSync(target, ejs.render(tpl, data));
+    var tpl = fs.readFileSync(source);
+    var content;
+    try {
+      content = ejs.render(tpl.toString(), data);
+    } catch (e) {
+      content = tpl;
+    }
+    fs.writeFileSync(target, content);
   } catch (e) {
     console.error(e);
   }
