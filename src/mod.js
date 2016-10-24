@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:18:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-09-01 21:19:14
+* @Last Modified time: 2016-10-20 16:51:22
 */
 
 'use strict';
@@ -44,6 +44,8 @@ module.exports = function(type, url, force) {
       // make files
       util.makeFiles(path.join(results[0], type), abc.root, answers, filter);
     });
+  }).catch(function(err) {
+    console.error(err);
   });
 };
 

@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-06-27 19:31:49
+* @Last Modified time: 2016-10-24 15:23:02
 */
 
 'use strict';
@@ -22,7 +22,8 @@ var ALIAS = {
   h5: 'https://github.com/nowa-webpack/template-salt/archive/master.zip',
   salt: 'https://github.com/nowa-webpack/template-salt/archive/master.zip',
   web: 'https://github.com/nowa-webpack/template-uxcore/archive/master.zip',
-  uxcore: 'https://github.com/nowa-webpack/template-uxcore/archive/master.zip'
+  uxcore: 'https://github.com/nowa-webpack/template-uxcore/archive/master.zip',
+  amaze: 'https://github.com/nowa-webpack/template-amaze/archive/master.zip'
 };
 
 var util = {
