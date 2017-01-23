@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:18:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-10-20 16:51:22
+* @Last Modified time: 2017-01-23 14:17:06
 */
 
 'use strict';
@@ -24,7 +24,7 @@ module.exports = function(type, url, force) {
     name: 'name',
     message: type + ' name',
     validate: function(name) {
-      return /^\w[\w\-]*\w$/.test(name) ? true : 'name is not valid';
+      return /^\w[\w\-\.]*\w$/.test(name) ? true : 'name is not valid';
     }
   }]);
 
