@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-11-18 17:25:32
+* @Last Modified time: 2017-02-17 16:16:32
 */
 
 'use strict';
@@ -151,7 +151,7 @@ var util = {
       // real target file
       var target = path.join(targetDir, source.replace(/__(\w+)__/g, function(p, p1) {
         return data[p1];
-      }));
+      }).replace('.npmignore', '.gitignore'));
 
       // ensure target dir exists
       mkdirp.sync(path.dirname(target));
