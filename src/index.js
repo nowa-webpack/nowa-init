@@ -2,7 +2,7 @@
 * @Author: gbk <ck0123456@gmail.com>
 * @Date:   2016-04-21 17:34:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2016-07-05 17:13:07
+* @Last Modified time: 2017-03-23 21:10:45
 */
 
 'use strict';
@@ -30,7 +30,8 @@ module.exports = {
     [ '-t, --template <uri>', 'template zip url' ],
     [ '    --type <type>', 'shortcut of template option' ],
     [ '-f, --force', 'force to fetch new template' ],
-    [ '-a, --as <alias>', 'alias to template url' ]
+    [ '-a, --as <alias>', 'alias to template url' ],
+    [ '-c, --cwd', 'generate module at cwd' ]
   ],
 
   action: function(type, command) {
@@ -39,6 +40,7 @@ module.exports = {
     var template = util.getAlias(command.template || command.type || type);
     var force = command.force;
     var alias = command.as;
+    var cwd = command.cwd;
 
     // template should always be a url
     if (!/^https?:\/\//.test(template)) {
@@ -50,7 +52,7 @@ module.exports = {
     if (type === 'proj' || /^https?:\/\//.test(util.getAlias(type))) {
       proj(template, force);
     } else {
-      mod(type, template, force);
+      mod(type, template, force, cwd);
     }
 
     // save alias

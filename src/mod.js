@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:18:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2017-01-23 14:17:06
+* @Last Modified time: 2017-03-23 20:53:43
 */
 
 'use strict';
@@ -13,11 +13,11 @@ var inquirer = require('inquirer');
 
 var util = require('./util');
 
-module.exports = function(type, url, force) {
+module.exports = function(type, url, force, cwd) {
 
   console.log('\nWelcome to nowa ' + type + ' generator!\n');
 
-  var abc = util.loadAbc();
+  var abc = util.loadAbc(cwd);
 
   // interaction
   var promptTask = inquirer.prompt([{
