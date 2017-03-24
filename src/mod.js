@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:18:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2017-03-23 20:53:43
+* @Last Modified time: 2017-03-24 15:25:50
 */
 
 'use strict';
@@ -17,7 +17,7 @@ module.exports = function(type, url, force, cwd) {
 
   console.log('\nWelcome to nowa ' + type + ' generator!\n');
 
-  var abc = util.loadAbc(cwd);
+  var abc = util.loadAbc();
 
   // interaction
   var promptTask = inquirer.prompt([{
@@ -42,7 +42,7 @@ module.exports = function(type, url, force, cwd) {
     util.customPrompts(promptConfigPath, results[1], abc).then(function(answers) {
 
       // make files
-      util.makeFiles(path.join(results[0], type), abc.root, answers, filter);
+      util.makeFiles(path.join(results[0], type), abc.root, answers, filter, null, cwd);
     });
   }).catch(function(err) {
     console.error(err);

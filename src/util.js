@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2017-03-23 21:42:31
+* @Last Modified time: 2017-03-24 15:27:18
 */
 
 'use strict';
@@ -23,7 +23,7 @@ var alias = require('./alias.json');
 var util = {
 
   // try to find and load abc.json
-  loadAbc: function(c) {
+  loadAbc: function() {
     var cwd = process.cwd();
     var dir = cwd;
     var lastDir, abc;
@@ -38,7 +38,7 @@ var util = {
       }
     }
     return {
-      root: !c && abc ? dir : cwd, // use abc dir as project root
+      root: abc ? dir : cwd, // use abc dir as project root
       options: abc && abc.options ? abc.options : {} // load abc options
     };
   },
@@ -132,7 +132,7 @@ var util = {
   },
 
   // generate files
-  makeFiles: function(sourceDir, targetDir, data, filter, callback) {
+  makeFiles: function(sourceDir, targetDir, data, filter, callback, cwd) {
     console.log('\nStart to copy files ...\n');
     var prompts = [];
 
@@ -150,8 +150,11 @@ var util = {
 
       // real target file
       var src = source;
-      if (process.cwd() === targetDir && source.indexOf('__') > 0) {
-        src = src.replace(/.+?__/, '__');
+      if (cwd) {
+        targetDir = process.cwd();
+        if (source.indexOf('__') > 0) {
+          src = src.replace(/.+?__/, '__');
+        }
       }
       var target = path.join(targetDir, src.replace(/__(\w+)__/g, function(p, p1) {
         return data[p1];
