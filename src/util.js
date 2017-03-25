@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2017-03-24 15:27:18
+* @Last Modified time: 2017-03-25 12:44:41
 */
 
 'use strict';
@@ -150,13 +150,14 @@ var util = {
 
       // real target file
       var src = source;
+      var dist = targetDir;
       if (cwd) {
-        targetDir = process.cwd();
+        dist = process.cwd();
         if (source.indexOf('__') > 0) {
           src = src.replace(/.+?__/, '__');
         }
       }
-      var target = path.join(targetDir, src.replace(/__(\w+)__/g, function(p, p1) {
+      var target = path.join(dist, src.replace(/__(\w+)__/g, function(p, p1) {
         return data[p1];
       }).replace('.npmignore', '.gitignore'));
 
@@ -201,10 +202,10 @@ var util = {
             writeFile(p[0], p[1], data);
           }
         }
-        callback && callback();
+        callback && callback(targetDir);
       });
     } else {
-      callback && callback();
+      callback && callback(targetDir);
     }
   },
 

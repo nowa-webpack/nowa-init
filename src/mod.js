@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:18:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2017-03-24 15:25:50
+* @Last Modified time: 2017-03-25 12:06:18
 */
 
 'use strict';
@@ -38,11 +38,13 @@ module.exports = function(type, url, force, cwd) {
 
     // deal with custom prompt config
     var promptConfigPath = path.join(results[0], type + '.js');
-    var filter = loadConfig(promptConfigPath).filter;
+    var cmdCfg = loadConfig(promptConfigPath);
+    var filter = cmdCfg.filter;
+    var done = cmdCfg.done;
     util.customPrompts(promptConfigPath, results[1], abc).then(function(answers) {
 
       // make files
-      util.makeFiles(path.join(results[0], type), abc.root, answers, filter, null, cwd);
+      util.makeFiles(path.join(results[0], type), abc.root, answers, filter, done, cwd);
     });
   }).catch(function(err) {
     console.error(err);
