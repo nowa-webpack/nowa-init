@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2017-03-25 12:44:41
+* @Last Modified time: 2017-04-25 19:49:27
 */
 
 'use strict';
@@ -70,6 +70,9 @@ var util = {
 
   // fetch remote template
   fetchTpl: function(url, callback, force) {
+    if (util.existsDirectory(url)) {
+      return callback(url);
+    }
     var now = Date.now();
     var basedir = path.join(os.homedir(), '.nowa', 'init', 'templates');
 
@@ -234,6 +237,15 @@ var util = {
         resolve(prevAnswers);
       }
     });
+  },
+
+  // file exists and is directory
+  existsDirectory: function(target) {
+    try {
+      return fs.statSync(target).isDirectory();
+    } catch (err) {
+      return false;
+    }
   }
 };
 

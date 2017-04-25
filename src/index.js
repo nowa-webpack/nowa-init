@@ -2,7 +2,7 @@
 * @Author: gbk <ck0123456@gmail.com>
 * @Date:   2016-04-21 17:34:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2017-03-23 21:10:45
+* @Last Modified time: 2017-04-25 19:57:33
 */
 
 'use strict';
@@ -42,14 +42,14 @@ module.exports = {
     var alias = command.as;
     var cwd = command.cwd;
 
-    // template should always be a url
-    if (!/^https?:\/\//.test(template)) {
+    // template should be an url or a local dir
+    if (!/^https?:\/\//.test(template) && !util.existsDirectory(template)) {
       console.error('Can not load template: ' + template);
       return;
     }
 
-    // generate a project if type is proj or alias to a url
-    if (type === 'proj' || /^https?:\/\//.test(util.getAlias(type))) {
+    // generate a project if type is proj or alias to an url or is a local dir
+    if (type === 'proj' || /^https?:\/\//.test(util.getAlias(type)) || util.existsDirectory(type)) {
       proj(template, force);
     } else {
       mod(type, template, force, cwd);
