@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:17:55
 * @Last Modified by:   gbk
-* @Last Modified time: 2017-03-25 12:45:28
+* @Last Modified time: 2017-04-26 11:39:47
 */
 
 'use strict';
@@ -60,10 +60,8 @@ module.exports = function(url, force) {
     default: (config['remote "origin"'] || {}).url || ''
   }, {
     name: 'npm',
-    type: 'list',
-    message: 'Which npm do you perfer?',
-    choices: [ 'npm', 'cnpm', 'tnpm' ],
-    default: 'npm'
+    message: 'Npm registry',
+    default: 'https://registry.npm.taobao.org'
   }]);
 
   // start to generate files when templates and answers are ready
@@ -88,15 +86,44 @@ module.exports = function(url, force) {
         npmInstall(answers.npm, abc.root);
         done && done(abc.root);
       });
+    }).catch(function(err) {
+      console.log(err);
     });
   });
 };
 
+// get npm registry
+function getNpmRegistry(npm) {
+  switch (npm) {
+    case 'npm':
+      return {
+        cmd: 'npm',
+        registry: 'https://registry.npmjs.org'
+      };
+    case 'cnpm':
+      return {
+        cmd: 'cnpm',
+        registry: 'https://registry.npm.taobao.org'
+      };
+    case 'tnpm':
+      return {
+        cmd: 'tnpm',
+        registry: 'http://registry.npm.alibaba-inc.com'
+      };
+    default:
+      return {
+        cmd: 'npm',
+        registry: npm
+      };
+  }
+}
+
 // call npm install
 function npmInstall(npm, root) {
-  spawn(process.platform === 'win32' ? npm + '.cmd' : npm, [
+  var npmRegistry = getNpmRegistry(npm);
+  spawn(process.platform === 'win32' ? npmRegistry.cmd + '.cmd' : npmRegistry.cmd, [
     'install',
-    '-d'
+    '--registry=' + npmRegistry.registry
   ], {
     cwd: root,
     stdio: 'inherit',
