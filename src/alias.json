@@ -1,9 +1,10 @@
 {
-  "h5": "https://github.com/nowa-webpack/template-salt/archive/master.zip",
-  "salt": "https://github.com/nowa-webpack/template-salt/archive/master.zip",
-  "web": "https://github.com/nowa-webpack/template-uxcore/archive/v2.zip",
-  "uxcore": "https://github.com/nowa-webpack/template-uxcore/archive/v2.zip",
+  "h5": "https://github.com/nowa-webpack/template-salt/archive/v2.zip",
+  "salt": "https://github.com/nowa-webpack/template-salt/archive/v2.zip",
+  "web": "https://github.com/nowa-webpack/template-uxcore/archive/v4.zip",
+  "uxcore": "https://github.com/nowa-webpack/template-uxcore/archive/v4.zip",
+  "refast": "https://github.com/nowa-webpack/template-uxcore/archive/v4.zip",
+  "no-flux": "https://github.com/nowa-webpack/template-uxcore/archive/v4.zip",
   "amaze": "https://github.com/nowa-webpack/template-amaze/archive/master.zip",
-  "no-flux": "https://github.com/fengsx/template-no-flux/archive/master.zip",
   "antdmobile": "https://github.com/nowa-webpack/template-antdmobile/archive/master.zip"
 }
