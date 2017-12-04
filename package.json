@@ -22,7 +22,7 @@
   "dependencies": {
     "chalk": "~1.1.3",
     "download": "~5.0.2",
-    "ejs": "~2.4.1",
+    "ejs": "~2.5.5",
     "git-config": "~0.0.7",
     "glob": "~7.0.3",
     "inquirer": "~1.0.2",

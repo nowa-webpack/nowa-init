@@ -2,7 +2,7 @@
 * @Author: gbk
 * @Date:   2016-05-12 19:35:00
 * @Last Modified by:   gbk
-* @Last Modified time: 2017-04-25 19:49:27
+* @Last Modified time: 2017-05-19 15:23:10
 */
 
 'use strict';
@@ -260,6 +260,7 @@ function writeFile(source, target, data) {
     try {
       content = ejs.render(tpl.toString(), data);
     } catch (e) {
+      console.error(e);
       content = tpl;
     }
     fs.writeFileSync(target, content);
